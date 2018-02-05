@@ -2,8 +2,8 @@
   (:require [aleph.http :as http]
             [hellhound.component :as hcomp]
             [manifold.stream :as stream]
-            [manifold.deferred :as d]))
-
+            [manifold.deferred :as d]
+            [hellhound.system :refer [defcomponent]]))
 
 (defn handler
   [input output]
@@ -41,3 +41,22 @@
   {:hellhound.component/name ::server
    :hellhound.component/start-fn (start! port)
    :hellhound.component/stop-fn stop!})
+
+(defn make-response
+  [output]
+  (fn [{:keys [index-content] :as event}]
+    (stream/put! output
+                 (assoc event :response {:body index-content
+                                         :headers []
+                                         :status 200}))))
+
+(defn ->response
+  [this context]
+  (let [input  (hcomp/input this)
+        output (hcomp/output this)]
+    (stream/consume (make-response output) input)
+    this))
+
+(defn ->response-factory
+  []
+  (defcomponent ::->response ->response #(identity %)))
