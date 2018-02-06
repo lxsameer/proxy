@@ -20,8 +20,7 @@
 (defn start!
   [port]
   (fn [this context]
-    (let [input  (hcomp/input this)
-          output (hcomp/output this)]
+    (let [[input output] (hcomp/io this)]
       (assoc this
              :server
              (http/start-server (handler input output) {:port port})))))
@@ -52,8 +51,7 @@
 
 (defn ->response
   [this context]
-  (let [input  (hcomp/input this)
-        output (hcomp/output this)]
+  (let [[input output] (hcomp/io this)]
     (stream/consume (make-response output) input)
     this))
 

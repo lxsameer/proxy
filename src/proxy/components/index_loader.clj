@@ -22,8 +22,7 @@
 
 (defn start!
   [component context]
-  (let [input  (hcomp/input component)
-        output (hcomp/output component)]
+  (let [[input output] (hcomp/io component)]
     (stream/consume (load-index output) input)
     component))
 

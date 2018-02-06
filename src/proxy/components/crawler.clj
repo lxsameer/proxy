@@ -28,8 +28,7 @@
 (defn start
   [host]
   (fn [component context]
-   (let [input  (hcomp/input component)
-         output (hcomp/output component)]
+    (let [[input output] (hcomp/io component)]
      (stream/consume (proxy output host) input)
      component)))
 
