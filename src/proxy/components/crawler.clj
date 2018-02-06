@@ -3,7 +3,8 @@
    [manifold.stream :as stream]
    [hellhound.component :as hcomp]
    [aleph.http :as http]
-   [hellhound.system :refer [defcomponent]]))
+   [hellhound.system :refer [defcomponent]]
+   [manifold.deferred :as d]))
 
 (defn response
   [res]
@@ -14,8 +15,8 @@
 (defn fetch-url
   [url]
   (println "PROXYING '" url "'...")
-  (-> @(http/get url)
-      response))
+  (d/chain (http/get url)
+           response))
 
 (defn proxy
   [output host]
