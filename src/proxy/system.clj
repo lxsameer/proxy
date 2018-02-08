@@ -12,12 +12,7 @@
 (defn factory
   [port host]
   {:components [(web/factory {:port port})
-                (crawler/factory host)
-                (loader/factory)
-                (web/->response-factory)]
+                (crawler/factory host)]
 
-   :workflow [[::web/server #(not (= "/" (uri %))) ::crawler/job]
-              [::web/server #(= "/" (uri %))       ::loader/job]
-              [::crawler/job ::web/server]
-              [::loader/job  ::web/->response]
-              [::web/->response ::web/server]]})
+   :workflow [[::web/server  ::crawler/job]
+              [::crawler/job ::web/server]]})

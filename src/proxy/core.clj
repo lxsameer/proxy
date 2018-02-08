@@ -1,5 +1,5 @@
 (ns proxy.core
-  (:require [proxy.system :as system]
+  (:require [proxy.system1 :as system]
             [hellhound.system :as hh-system]
             [aleph.http :as http])
   (:gen-class))
